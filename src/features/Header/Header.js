@@ -1,12 +1,16 @@
 import React from 'react'
-import redditLogo from '../../images/reddit-logo.png'
+import './Header.css'
+
 import Search from '../Search/Search'
+import { FaReddit } from 'react-icons/fa'
 
 const Header = () => {
   return (
-    <div className='header'>
-        <img src={redditLogo} alt=''/>
+    <div className='header global-box-shadow'>
+      <div className='logo-container'>
+        <FaReddit size={50} className='reddit-logo'/>
         <h1>RedditMinimal</h1>
+      </div>
         <Search />
     </div>
   )

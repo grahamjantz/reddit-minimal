@@ -1,0 +1,34 @@
+.subreddit {
+    width: fit-content;
+    height: auto;
+    display: flex;
+    align-items: center;
+    padding: 0.5em;
+    gap: 5px;
+}
+
+.subreddit:hover {
+    cursor: pointer;
+}
+
+.check-box {
+    width: 30px;
+    height: 30px;
+    border: 3px solid var(--main-font);
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.subreddit.true {
+    background-color: var(--main-light-blue);
+    border-left: 3px solid var(--main-dark-blue);
+}
+
+@media only screen and (min-width: 750px) {
+    .subreddit {
+        width: 100%;
+        padding: 1.5em;
+        padding-left: 0.5em;
+    }
+}

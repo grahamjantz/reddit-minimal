@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import './Search.css'
 
 const Search = () => {
 
@@ -9,17 +10,14 @@ const Search = () => {
   }
 
   return (
-    <div className='search-bar'>
-        <form>
-          <input 
-            type='text' 
-            value={text} 
-            onChange={handleChange}
-            placeholder='Search'
-          />
-        </form>
-        <p>{text}</p>
-    </div>
+    <form className='search-bar'>
+      <input 
+        type='text' 
+        value={text} 
+        onChange={handleChange}
+        placeholder='Search'
+      />
+    </form>
   )
 }
 
