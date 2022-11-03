@@ -1,11 +1,21 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
+
 import './SubReddit.css'
 
 import { FaCheck } from 'react-icons/fa'
+import { fetchPosts } from '../SubredditsList/SubRedditsListSlice'
 
-const SubReddit = ({ title, active }) => {
+const SubReddit = ({ title, active, onClick }) => {
+
+  const dispatch = useDispatch();
+
+  const handleClick = () => {
+    dispatch(fetchPosts(title))
+  }
+
   return (
-    <div className={`subreddit ${active}`}>
+    <div className={`subreddit ${active}`} onClick={handleClick}>
         <div className='check-box'>
             {active === true ? <FaCheck size={50}/> : false}
         </div>
