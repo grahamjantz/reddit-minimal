@@ -4,15 +4,16 @@ import './SubredditsList.css'
 
 import SubReddit from '../SubReddit/SubReddit'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectCurrentSubreddit, selectSubReddits, toggleActive } from './SubRedditsListSlice'
+import { selectSubReddits, toggleActive } from './SubRedditsListSlice'
+import { selectCurrentSubreddit } from '../PostsList/PostsListSlice'
 
 
 
 const SubredditsList = () => {
 
   const dispatch = useDispatch()
-  const selectedCurrentSubreddit = useSelector(selectCurrentSubreddit)
   const subreddits = useSelector(selectSubReddits)
+  const selectedCurrentSubreddit = useSelector(selectCurrentSubreddit)
 
   useEffect(() => {
     dispatch(toggleActive(selectedCurrentSubreddit))

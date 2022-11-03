@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {  createSlice } from "@reduxjs/toolkit";
 
 const subs = ['Home', 'mildlyinteresting', 'funny', 'space', 'Damnthatsinteresting', 'technology', 'tifu', 'AbsoluteUnits', 'books', 'wallstreetbets', 'dataisbeautiful', 'Cooking', 'blursedimages']
 
@@ -20,18 +20,7 @@ const subreddits = subs.map((subreddit) => {
 
 const initialState = {
     subredditList: subreddits,
-    currentSubreddit: '',
-    posts: []
 }
-
-export const fetchPosts = createAsyncThunk(
-    'subreddits/fetchPosts',
-    async (subreddit) => {
-    const res = await fetch(`https://www.reddit.com/r/${subreddit}.json`)
-    const data = await res.json()
-    return data.data.children
-    }
-)
 
 export const SubredditsListSlice = createSlice({
     name: 'subreddits',
@@ -39,7 +28,7 @@ export const SubredditsListSlice = createSlice({
     reducers: {
         toggleActive (state, action) {
             state.subredditList.map((subreddit) => {
-                if (subreddit.title.toLowerCase() === state.currentSubreddit.toLowerCase()) {
+                if (subreddit.title.toLowerCase() === action.payload.toLowerCase()) {
                     subreddit.active = true
                 } else {
                     subreddit.active = false
@@ -48,19 +37,13 @@ export const SubredditsListSlice = createSlice({
             })
         }
     },
-    extraReducers: (builder) => {
-        builder
-            .addCase(fetchPosts.fulfilled, (state, action) => {
-                state.posts = action.payload
-                state.currentSubreddit = action.payload[0].data.subreddit
-            })
+    extraReducers: () => {
+        
     }
 })
 
 export const { toggleActive } = SubredditsListSlice.actions;
 
-export const selectPosts = (state) => state.subreddits.posts;
-export const selectCurrentSubreddit = (state) => state.subreddits.currentSubreddit;
 export const selectSubReddits = (state) => state.subreddits.subredditList
 
 export default SubredditsListSlice.reducer;

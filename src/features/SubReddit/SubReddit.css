@@ -5,6 +5,7 @@
     align-items: center;
     padding: 0.5em;
     gap: 5px;
+    
 }
 
 .subreddit:hover {
@@ -14,6 +15,7 @@
 .check-box {
     width: 30px;
     height: 30px;
+    min-width: 30px;
     border: 3px solid var(--main-font);
     border-radius: 30px;
     display: flex;
@@ -28,7 +30,7 @@
 @media only screen and (min-width: 750px) {
     .subreddit {
         width: 100%;
-        padding: 1.5em;
-        padding-left: 0.5em;
+        padding: 1.5em 0;
+        overflow-x: hidden;
     }
 }

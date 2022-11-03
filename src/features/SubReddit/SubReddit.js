@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import './SubReddit.css'
 
 import { FaCheck } from 'react-icons/fa'
-import { fetchPosts } from '../SubredditsList/SubRedditsListSlice'
+import { fetchPosts } from '../PostsList/PostsListSlice'
 
 const SubReddit = ({ title, active, onClick }) => {
 
