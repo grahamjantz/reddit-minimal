@@ -28,9 +28,6 @@ const Post = ({ post, comments, showComments, renderModal }) => {
         dispatch(toggleComments(post.data.id))
     }
     
-    useEffect(() => {
-        dispatch(fetchComments(post.data.id))
-    }, [])
     
     if (post.data.pending === false || post.data.pending === null) {
         return (
