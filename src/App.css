@@ -7,6 +7,10 @@
   color: var(--main-font);
 }
 
+.App li {
+  list-style: none;
+}
+
 .body {
   display: flex;
   flex-direction: column-reverse;

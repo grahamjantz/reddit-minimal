@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-
 const initialState = {
     currentSubreddit: '',
     posts: []
@@ -37,12 +36,22 @@ const rejectedPosts = {
     ]
 }
 
+export const fetchComments = createAsyncThunk(
+    'posts/fetchComments',
+    async (postId) => {
+            const res = await fetch(`https://www.reddit.com/comments/${postId}.json`)
+            const data = await res.json()
+            return data
+    }
+)
+
 export const fetchPosts = createAsyncThunk(
     'posts/fetchPosts',
     async (subreddit) => {
-    const res = await fetch(`https://www.reddit.com/r/${subreddit}.json`)
-    const data = await res.json()
-    return data.data.children
+        const res = await fetch(`https://www.reddit.com/r/${subreddit}.json`)
+        const data = await res.json()
+        const postsArr = await data.data.children
+        return postsArr
     }
 )
 
@@ -55,18 +64,8 @@ export const searchPosts = createAsyncThunk(
     }
 )
 
-export const fetchComments = createAsyncThunk(
-    'posts/fetchComments',
-    async(postId) => {
-        const res = await fetch(`https://www.reddit.com/comments/${postId}.json`)
-        const data = await res.json()
-        console.log(data)
-        return data
-    }
-)
-
 export const PostsListSlice = createSlice({
-    name: 'posts',
+    name: 'postsList',
     initialState,
     reducers: {
         upvote (state, action) {
@@ -99,7 +98,8 @@ export const PostsListSlice = createSlice({
                     post.data.pending = false
                     post.data.canUpvote = true
                     post.data.canDownvote = true
-                    post.data.comments =[]
+                    post.data.comments = []
+                    post.data.showComments = false
                     return 0
                 })
             })
@@ -120,16 +120,24 @@ export const PostsListSlice = createSlice({
                 state.posts = pendingPosts.posts
             })
             .addCase(fetchComments.fulfilled, (state, action) => {
-                state.posts.forEach((post) => {
-                    post.data.comments = action.payload
-                })
+                    state.posts.forEach((post) => {
+                        if (post.data.id === action.payload[0].data.children[0].data.id) {
+                            post.data.comments = action.payload[1].data.children
+                            if (post.data.showComments === false || post.data.showComments === null) {
+                                post.data.showComments = true
+                            } else if (post.data.showComments === true) {
+                                post.data.showComments = false
+                            }
+                        }
+                    })
             })
     }
 })
 
 export const { upvote, downvote } = PostsListSlice.actions;
 
-export const selectPosts = (state) => state.posts.posts;
-export const selectCurrentSubreddit = (state) => state.posts.currentSubreddit;
+export const selectPosts = (state) => state.postsList.posts;
+export const selectCurrentSubreddit = (state) => state.postsList.currentSubreddit;
+export const selectShowComments = (state) => state.postsList.posts.showComments
 
 export default PostsListSlice.reducer;

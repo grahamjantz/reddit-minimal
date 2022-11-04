@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { upvote, downvote, fetchComments, selectPosts } from '../PostsList/PostsListSlice';
+import React from 'react'
+import { upvote, downvote, fetchComments } from '../PostsList/PostsListSlice';
 
 import './Post.css'
 
@@ -7,16 +7,12 @@ import Comment from './Comment/Comment';
 
 import { FaRegCommentAlt } from 'react-icons/fa'
 import { TiArrowUpOutline, TiArrowDownOutline } from "react-icons/ti";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-const Post = ({ post, comments }) => {
-
-    const [showComments, setShowComments] = useState(false)
-
-    const posts = useSelector(selectPosts)
+const Post = ({ post, comments, showComments }) => {
 
     const ranNum = () => {
-        return Math.floor(Math.random() * 10000)
+        return Math.floor(Math.random() * 1000000)
     }
     const dispatch = useDispatch();
 
@@ -30,59 +26,55 @@ const Post = ({ post, comments }) => {
 
     const handleClick = () => {
         dispatch(fetchComments(post.data.id))
-        setShowComments(true)
     }
-
-    // useEffect(() => {
-        // }, [showComments])
-        
-    // dispatch(fetchComments(post.data.id))
-    // useEffect(() => {
-    //     dispatch(fetchComments(post.data.id))
-    // }, [dispatch])
-
+    
     if (post.data.pending === false || post.data.pending === null) {
         return (
             <div className='post global-box-shadow'>
-                <div className='vote-count'>
-                    <TiArrowUpOutline 
-                        size={25} 
-                        className={`vote-arrow up ${post.data.canUpvote}`} 
-                        onClick={sendUpvote}
-                    />
-                    <p style={
-                        {
-                            color: (post.data.canUpvote === false ? 'green' : '' || post.data.canDownvote === false ? 'red' : '')
-                        }
-                    }>
-                        {post.data.ups}
-                    </p>
-                    <TiArrowDownOutline 
-                        size={25} 
-                        className={`vote-arrow down ${post.data.canDownvote}`} 
-                        onClick={sendDownvote}/>
-                </div>
                 <div className='post-main-content'>
-                    <h3>{post.data.title}</h3>
-                    <img src={post.data.url} alt=''/>
-                    <p className='post-body'>{post.data.selftext}</p>
-                    <div className='post-footer'>
-                        <p className='username'>{post.data.author}</p>
-                        <p></p>
-                        <div className='comments-tile' onClick={handleClick}>
-                            <FaRegCommentAlt size={15}/>
-                            <p>{post.data.num_comments}</p>
-                        </div>
+                    <div className='vote-count'>
+                        <TiArrowUpOutline 
+                            size={25} 
+                            className={`vote-arrow up ${post.data.canUpvote}`} 
+                            onClick={sendUpvote}
+                        />
+                        <p style={
+                            {
+                                color: (post.data.canUpvote === false ? 'green' : '' || post.data.canDownvote === false ? 'red' : '')
+                            }
+                        }>
+                            {post.data.score}
+                        </p>
+                        <TiArrowDownOutline 
+                            size={25} 
+                            className={`vote-arrow down ${post.data.canDownvote}`} 
+                            onClick={sendDownvote}/>
                     </div>
-                    <ul className='post-comments-list'>
-                        {comments.map((comment) => {
-                            return (
-                                <Comment 
-                                    comment={comment}
-                                />
-                            )
-                        })}
-                    </ul>
+                    <div className='post-body'>
+                        <h3>{post.data.title}</h3>
+                        <img src={post.data.url} alt=''/>
+                        <p className='post-body'>{post.data.selftext}</p>
+                        <div className='post-footer'>
+                            <p className='username'>{post.data.author}</p>
+                            <p></p>
+                            <div className='comments-tile' onClick={handleClick}>
+                                <FaRegCommentAlt size={15}/>
+                                <p>{post.data.num_comments}</p>
+                            </div>
+                        </div>
+                        <ul className='post-comments-list'>
+                            {showComments === true ? (
+                                comments.map((comment) => {
+                                    return (
+                                        <Comment 
+                                            key={ranNum()}
+                                            comment={comment}
+                                        />
+                                    )
+                                })
+                            ) : ''}
+                        </ul>
+                    </div>
                 </div>
             </div>
           )

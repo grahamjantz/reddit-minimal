@@ -1,0 +1,15 @@
+.comment {
+    display: flex;
+    flex-direction: column;
+    transition: 0.2s;
+    padding: 1rem;
+}
+
+.comment-author {
+    color: var(--main-dark-blue);
+    font-weight: bold;
+}
+
+.comment:hover {
+    transform: translateX(-3px) translateY(-3px);
+    box-shadow: 0 10px 20px #d7d7d7;}

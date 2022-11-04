@@ -1,9 +1,11 @@
 import React from 'react'
+import './Comment.css'
 
 const Comment = ({ comment }) => {
   return (
     <li className='comment'>
-        <h3>{comment.data.children[0].data.body}</h3>
+        <p>{comment.data.body}</p>
+        <p className='comment-author'>{comment.data.author}</p>
     </li>
   )
 }

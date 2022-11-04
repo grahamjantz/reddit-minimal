@@ -5,39 +5,9 @@ import { generateId  } from '../SubredditsList/SubRedditsListSlice'
 import './PostsList.css'
 
 import Post from '../Post/Post'
-import { fetchComments, fetchPosts, selectPosts } from './PostsListSlice'
+import { fetchPosts, selectPosts } from './PostsListSlice'
 
 const PostsList = () => {
-
-    // const posts = [
-    //     {
-    //         id: 1,
-    //         upvotes: 49,
-    //         username: 'grahamjantz',
-    //         date_posted: '06/25/2022',
-    //         title: 'Lorem Ipsum',
-    //         img_src: '',
-    //         comment_count: 14
-    //     },
-    //     {
-    //         id: 2,
-    //         upvotes: 49,
-    //         username: 'grahamjantz',
-    //         date_posted: '06/25/2022',
-    //         title: 'Lorem Ipsum',
-    //         img_src: '',
-    //         comment_count: 14
-    //     },
-    //     {
-    //         id: 3,
-    //         upvotes: 49,
-    //         username: 'grahamjantz',
-    //         date_posted: '06/25/2022',
-    //         title: 'Lorem Ipsum',
-    //         img_src: '',
-    //         comment_count: 14
-    //     },
-    // ]
 
     const dispatch = useDispatch();
     const posts = useSelector(selectPosts)
@@ -54,6 +24,7 @@ const PostsList = () => {
                         post={post} 
                         key={generateId()}
                         comments={post.data.comments}
+                        showComments={post.data.showComments}
                     />
                 )
             })}
