@@ -6,7 +6,8 @@ import ReactModal from 'react-modal'
 import './PostsList.css'
 
 import Post from '../Post/Post'
-import { fetchPosts, selectPosts, fetchComments } from './PostsListSlice'
+import { fetchPosts, selectPosts } from './PostsListSlice'
+import { fetchComments } from '../Post/PostSlice'
 
 const PostsList = () => {
     
@@ -19,16 +20,11 @@ const PostsList = () => {
     const posts = useSelector(selectPosts)
 
     const [modalIsOpen, setModalIsOpen] = useState(false)
-    const [postForModal, setPostForModal] = useState({
-        data: {
-            comments: [],
-            showComments: false,
-        }
-    })
+    const [postForModal, setPostForModal] = useState({})
 
-    const renderModal = (post) => {
-        setPostForModal(post)
+    const renderModal = async (post) => {
         dispatch(fetchComments(post.data.id))
+        setPostForModal(post)
         console.log(post)
         setModalIsOpen(true)
     }
@@ -44,8 +40,8 @@ const PostsList = () => {
                     <Post
                         post={post} 
                         key={generateId()}
-                        comments={post.data.comments}
-                        showComments={post.data.showComments}
+                        // comments={post.data.comments}
+                        // showComments={post.data.showComments}
                         renderModal={renderModal}
                     />
                 )
@@ -56,8 +52,8 @@ const PostsList = () => {
             >
                 <Post 
                     post={postForModal}
-                    comments={postForModal.data.comments}
-                    showComments={postForModal.data.showComments}
+                    // comments={postForModal.data.comments}
+                    // showComments={postForModal.data.showComments}
                     renderModal={null}
                 />
 

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { upvote, downvote, fetchComments, toggleComments } from '../PostsList/PostsListSlice';
+import { upvote, downvote } from '../PostsList/PostsListSlice';
 
 import './Post.css'
 
@@ -7,14 +7,20 @@ import Comment from './Comment/Comment';
 
 import { FaRegCommentAlt } from 'react-icons/fa'
 import { TiArrowUpOutline, TiArrowDownOutline } from "react-icons/ti";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchComments, selectComments, selectShowComments, toggleComments } from './PostSlice';
 
-const Post = ({ post, comments, showComments, renderModal }) => {
+const Post = ({ post, renderModal }) => {
 
     const ranNum = () => {
         return Math.floor(Math.random() * 1000000)
     }
     const dispatch = useDispatch();
+
+    const comments = useSelector(selectComments)
+    console.log(comments[1])
+    // const children = comments[1].data.children
+    const showComments = useSelector(selectShowComments)
 
     const sendUpvote = () => {
         dispatch(upvote(post.data.title))
@@ -24,9 +30,13 @@ const Post = ({ post, comments, showComments, renderModal }) => {
         dispatch(downvote(post.data.title))
     }
 
-    const toggleComments = () => {
-        dispatch(toggleComments(post.data.id))
+    const triggerToggleComments = () => {
+        dispatch(fetchComments(post.data.id))
+        // dispatch(toggleComments(post.data.id))
     }
+
+    // useEffect(() => {
+    // }, [])
     
     
     if (post.data.pending === false || post.data.pending === null) {
@@ -58,13 +68,13 @@ const Post = ({ post, comments, showComments, renderModal }) => {
                         <div className='post-footer'>
                             <p className='username'>{post.data.author}</p>
                             <p></p>
-                            <div className='comments-tile' onClick={toggleComments}>
+                            <div className='comments-tile' onClick={triggerToggleComments}>
                                 <FaRegCommentAlt size={15}/>
                                 <p>{post.data.num_comments}</p>
                             </div>
                         </div>
                         <ul className='post-comments-list'>
-                            {showComments === true ? (
+                            {
                                 comments.map((comment) => {
                                     return (
                                         <Comment 
@@ -73,7 +83,7 @@ const Post = ({ post, comments, showComments, renderModal }) => {
                                         />
                                     )
                                 })
-                            ) : ''}
+                            }
                         </ul>
                     </div>
                 </div>
