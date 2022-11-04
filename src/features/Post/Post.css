@@ -71,6 +71,10 @@
     gap: 1rem;
 }
 
+.post-main-content:hover {
+    cursor: pointer;
+}
+
 .post-body {
     width: 90%;
     margin: 1em 0;

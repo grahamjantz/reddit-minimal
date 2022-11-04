@@ -1,5 +1,5 @@
-import React from 'react'
-import { upvote, downvote, fetchComments } from '../PostsList/PostsListSlice';
+import React, { useEffect } from 'react'
+import { upvote, downvote, fetchComments, toggleComments } from '../PostsList/PostsListSlice';
 
 import './Post.css'
 
@@ -9,7 +9,7 @@ import { FaRegCommentAlt } from 'react-icons/fa'
 import { TiArrowUpOutline, TiArrowDownOutline } from "react-icons/ti";
 import { useDispatch } from 'react-redux';
 
-const Post = ({ post, comments, showComments }) => {
+const Post = ({ post, comments, showComments, renderModal }) => {
 
     const ranNum = () => {
         return Math.floor(Math.random() * 1000000)
@@ -24,14 +24,18 @@ const Post = ({ post, comments, showComments }) => {
         dispatch(downvote(post.data.title))
     }
 
-    const handleClick = () => {
-        dispatch(fetchComments(post.data.id))
+    const toggleComments = () => {
+        dispatch(toggleComments(post.data.id))
     }
+    
+    useEffect(() => {
+        dispatch(fetchComments(post.data.id))
+    }, [])
     
     if (post.data.pending === false || post.data.pending === null) {
         return (
-            <div className='post global-box-shadow'>
-                <div className='post-main-content'>
+            <div className='post global-box-shadow' >
+                <div className='post-main-content' >
                     <div className='vote-count'>
                         <TiArrowUpOutline 
                             size={25} 
@@ -51,13 +55,13 @@ const Post = ({ post, comments, showComments }) => {
                             onClick={sendDownvote}/>
                     </div>
                     <div className='post-body'>
-                        <h3>{post.data.title}</h3>
+                        <h3 onClick={() => renderModal(post)}>{post.data.title}</h3>
                         <img src={post.data.url} alt=''/>
                         <p className='post-body'>{post.data.selftext}</p>
                         <div className='post-footer'>
                             <p className='username'>{post.data.author}</p>
                             <p></p>
-                            <div className='comments-tile' onClick={handleClick}>
+                            <div className='comments-tile' onClick={toggleComments}>
                                 <FaRegCommentAlt size={15}/>
                                 <p>{post.data.num_comments}</p>
                             </div>

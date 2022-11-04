@@ -87,6 +87,17 @@ export const PostsListSlice = createSlice({
                 }
                 return post
             })
+        },
+        toggleComments (state, action) {
+            state.posts.forEach((post) => {
+                if (post.data.id = action.payload) {
+                    if (post.data.showComments === false || post.data.showComments === null) {
+                        post.data.showComments = true
+                    } else if (post.data.showComments === true) {
+                        post.data.showComments = false
+                    }
+                }
+            })
         }
     },
     extraReducers: (builder) => {
@@ -123,18 +134,13 @@ export const PostsListSlice = createSlice({
                     state.posts.forEach((post) => {
                         if (post.data.id === action.payload[0].data.children[0].data.id) {
                             post.data.comments = action.payload[1].data.children
-                            if (post.data.showComments === false || post.data.showComments === null) {
-                                post.data.showComments = true
-                            } else if (post.data.showComments === true) {
-                                post.data.showComments = false
-                            }
                         }
                     })
             })
     }
 })
 
-export const { upvote, downvote } = PostsListSlice.actions;
+export const { upvote, downvote, toggleComments } = PostsListSlice.actions;
 
 export const selectPosts = (state) => state.postsList.posts;
 export const selectCurrentSubreddit = (state) => state.postsList.currentSubreddit;
