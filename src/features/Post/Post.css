@@ -71,7 +71,7 @@
     gap: 1rem;
 }
 
-.post-main-content:hover {
+.post-body h3:hover {
     cursor: pointer;
 }
 

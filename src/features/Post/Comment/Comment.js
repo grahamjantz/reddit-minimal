@@ -1,11 +1,11 @@
 import React from 'react'
 import './Comment.css'
 
-const Comment = ({ comment }) => {
+const Comment = ({ commentBody, author }) => {
   return (
     <li className='comment'>
-        <p>{comment.data.body}</p>
-        <p className='comment-author'>{comment.data.author}</p>
+        <p>{commentBody}</p>
+        <p className='comment-author'>{author}</p>
     </li>
   )
 }

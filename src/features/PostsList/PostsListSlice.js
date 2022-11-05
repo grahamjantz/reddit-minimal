@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     currentSubreddit: '',
+    currentPostId: '',
     posts: []
 }
 
@@ -55,6 +56,15 @@ export const searchPosts = createAsyncThunk(
     }
 )
 
+export const fetchComments = createAsyncThunk(
+    'posts/fetchComments',
+    async (postId) => {
+        const res = await fetch(`https://www.reddit.com/comments/${postId}.json`)
+        const data = await res.json()
+        return data
+    }
+)
+
 export const PostsListSlice = createSlice({
     name: 'postsList',
     initialState,
@@ -79,6 +89,13 @@ export const PostsListSlice = createSlice({
                 return post
             })
         },
+        toggleComments (state, action) {
+            state.posts.map((post) => {
+                if (post.data.id === action.payload) {
+                    post.data.showComments === false ? post.data.showComments = true : post.data.showComments = false
+                }
+            })
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -110,13 +127,21 @@ export const PostsListSlice = createSlice({
             .addCase(searchPosts.pending, (state) => {
                 state.posts = pendingPosts.posts
             })
-            
+            .addCase(fetchComments.fulfilled, (state, action) => {
+                state.currentPostId = action.payload[0].data.children[0].data.id
+                state.posts.map((post) => {
+                    if (post.data.id === state.currentPostId) {
+                        post.data.comments = action.payload[1].data.children
+                    }
+                })
+            })            
     }
 })
 
-export const { upvote, downvote } = PostsListSlice.actions;
+export const { upvote, downvote, toggleComments } = PostsListSlice.actions;
 
 export const selectPosts = (state) => state.postsList.posts;
 export const selectCurrentSubreddit = (state) => state.postsList.currentSubreddit;
+export const selectCurrentPostId = (state) => state.postsList.currentPostId;
 
 export default PostsListSlice.reducer;

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { upvote, downvote } from '../PostsList/PostsListSlice';
+import { upvote, downvote, fetchComments, selectPosts, selectCurrentPostId, toggleComments } from '../PostsList/PostsListSlice';
 
 import './Post.css'
 
@@ -8,36 +8,29 @@ import Comment from './Comment/Comment';
 import { FaRegCommentAlt } from 'react-icons/fa'
 import { TiArrowUpOutline, TiArrowDownOutline } from "react-icons/ti";
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchComments, selectComments, selectShowComments, toggleComments } from './PostSlice';
 
-const Post = ({ post, renderModal }) => {
+const Post = ({ post, renderModal, comments, showComments }) => {
 
     const ranNum = () => {
         return Math.floor(Math.random() * 1000000)
     }
     const dispatch = useDispatch();
 
-    const comments = useSelector(selectComments)
-    console.log(comments[1])
-    // const children = comments[1].data.children
-    const showComments = useSelector(selectShowComments)
-
+    const currentPostId = useSelector(selectCurrentPostId)
+    
     const sendUpvote = () => {
         dispatch(upvote(post.data.title))
     }
-
+    
     const sendDownvote = () => {
         dispatch(downvote(post.data.title))
     }
-
-    const triggerToggleComments = () => {
-        dispatch(fetchComments(post.data.id))
-        // dispatch(toggleComments(post.data.id))
-    }
-
-    // useEffect(() => {
-    // }, [])
     
+    const triggerToggleComments = () => {
+        dispatch(toggleComments(post.data.id))
+        dispatch(fetchComments(post.data.id))
+    }    
+
     
     if (post.data.pending === false || post.data.pending === null) {
         return (
@@ -75,14 +68,18 @@ const Post = ({ post, renderModal }) => {
                         </div>
                         <ul className='post-comments-list'>
                             {
-                                comments.map((comment) => {
-                                    return (
-                                        <Comment 
-                                            key={ranNum()}
-                                            comment={comment}
-                                        />
-                                    )
-                                })
+                               (post.data.id === currentPostId && showComments === true) ? (
+                                    comments.map((comment) => {
+                                        return (
+                                            <Comment 
+                                                key={ranNum()}
+                                                commentBody={comment.data.body}
+                                                author={comment.data.author}
+                                            />
+                                        )
+                                    })
+                                ) : ('')
+                                        
                             }
                         </ul>
                     </div>

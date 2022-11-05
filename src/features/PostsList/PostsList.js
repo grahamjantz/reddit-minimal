@@ -6,8 +6,7 @@ import ReactModal from 'react-modal'
 import './PostsList.css'
 
 import Post from '../Post/Post'
-import { fetchPosts, selectPosts } from './PostsListSlice'
-import { fetchComments } from '../Post/PostSlice'
+import { fetchPosts, selectPosts, fetchComments, toggleComments } from './PostsListSlice'
 
 const PostsList = () => {
     
@@ -20,14 +19,32 @@ const PostsList = () => {
     const posts = useSelector(selectPosts)
 
     const [modalIsOpen, setModalIsOpen] = useState(false)
-    const [postForModal, setPostForModal] = useState({})
+    const [postForModal, setPostForModal] = useState({
+        data: {
+            comments: [],
+            showComments: false
+        }
+    })
 
     const renderModal = async (post) => {
-        dispatch(fetchComments(post.data.id))
+        // dispatch(fetchComments(post.data.id))
         setPostForModal(post)
-        console.log(post)
         setModalIsOpen(true)
     }
+
+    let commentsForModal;
+    posts.map((post) => {
+        if (post.data.id === postForModal.data.id) {
+            // console.log(post.data.comments)
+            // console.log(postForModal.data.id)
+            commentsForModal = post.data.comments
+        }
+        return commentsForModal
+    })
+
+    console.log(commentsForModal)
+
+    // console.log(postForModal)
 
     const closeModal = () => {
         setModalIsOpen(false)
@@ -40,8 +57,8 @@ const PostsList = () => {
                     <Post
                         post={post} 
                         key={generateId()}
-                        // comments={post.data.comments}
-                        // showComments={post.data.showComments}
+                        comments={post.data.comments}
+                        showComments={post.data.showComments}
                         renderModal={renderModal}
                     />
                 )
@@ -52,8 +69,8 @@ const PostsList = () => {
             >
                 <Post 
                     post={postForModal}
-                    // comments={postForModal.data.comments}
-                    // showComments={postForModal.data.showComments}
+                    comments={commentsForModal}
+                    showComments={postForModal.data.showComments}
                     renderModal={null}
                 />
 
