@@ -9,7 +9,7 @@ import { FaRegCommentAlt } from 'react-icons/fa'
 import { TiArrowUpOutline, TiArrowDownOutline } from "react-icons/ti";
 import { useDispatch, useSelector } from 'react-redux';
 
-const Post = ({ post, renderModal, comments, showComments }) => {
+const Post = ({ post, renderModal, comments, showComments, modalComments }) => {
 
     const ranNum = () => {
         return Math.floor(Math.random() * 1000000)

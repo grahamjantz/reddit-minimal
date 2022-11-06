@@ -16,6 +16,7 @@ const Search = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     dispatch(searchPosts(text))
+    setText('')
   }
 
   return (

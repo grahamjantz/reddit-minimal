@@ -5,6 +5,7 @@ const initialState = {
     currentPostId: '',
     currentPost: {},
     currentPostComments: [],
+    currentPostShowComments: false,
     posts: []
 }
 
@@ -105,6 +106,8 @@ export const PostsListSlice = createSlice({
                 if (post.data.id === action.payload) {
                     post.data.showComments === false ? post.data.showComments = true : post.data.showComments = false
                 }
+                state.currentPostShowComments === false ? state.currentPostShowComments = true : state.currentPostShowComments = false
+                return 0
             })
         },
         setCurrentPostId (state, action) {
@@ -154,10 +157,11 @@ export const PostsListSlice = createSlice({
                     if (post.data.id === state.currentPostId) {
                         post.data.comments = action.payload[1].data.children
                     }
+                    return 0
                 })
             }) 
             .addCase(fetchModalPost.pending, (state, action) => {
-                state.currentPost.data.pending = true
+                state.currentPost = pendingPosts.posts[0]
             })
             .addCase(fetchModalPost.fulfilled, (state, action) => {
                 state.currentPost = action.payload[0].data.children[0]
@@ -167,7 +171,11 @@ export const PostsListSlice = createSlice({
                 state.currentPost.data.canDownvote = true
                 state.currentPost.data.comments = []
                 state.currentPost.data.showComments = false
-            })          
+                
+            })       
+            .addCase(fetchModalPost.rejected, (state) => {
+                state.currentPost = rejectedPosts.posts[0]
+            })   
     }
 })
 
@@ -177,6 +185,7 @@ export const selectPosts = (state) => state.postsList.posts;
 export const selectCurrentSubreddit = (state) => state.postsList.currentSubreddit;
 export const selectCurrentPostId = (state) => state.postsList.currentPostId;
 export const selectCurrentPost = (state) => state.postsList.currentPost
-export const selectCurrenPostComments = (state) => state.postsList.currentPostComments
+export const selectCurrentPostComments = (state) => state.postsList.currentPostComments
+export const selectCurrentPostShowComments = (state) => state.postsList.currentPostShowComments
 
 export default PostsListSlice.reducer;

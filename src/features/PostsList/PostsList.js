@@ -6,7 +6,7 @@ import ReactModal from 'react-modal'
 import './PostsList.css'
 
 import Post from '../Post/Post'
-import { fetchPosts, selectPosts, fetchComments, toggleComments, setCurrentPostId, selectCurrentPostId, setCurrentPostComments, selectCurrenPostComments, setCurrentPost, fetchModalPost, selectCurrentPost } from './PostsListSlice'
+import { fetchPosts, selectPosts, toggleComments, selectCurrentPostComments, fetchModalPost, selectCurrentPost, selectCurrentPostShowComments } from './PostsListSlice'
 
 const PostsList = () => {
     
@@ -17,31 +17,20 @@ const PostsList = () => {
     }, [dispatch])
     
     const posts = useSelector(selectPosts)
-    const currentPostId = useSelector(selectCurrentPostId)
     const currentPost = useSelector(selectCurrentPost)
-    const currentPostComments = useSelector(selectCurrenPostComments)
+    const currentPostComments = useSelector(selectCurrentPostComments)
+    const currentPostShowComments = useSelector(selectCurrentPostShowComments)
 
     const [modalIsOpen, setModalIsOpen] = useState(false)
-    const [postForModal, setPostForModal] = useState()
 
     const renderModal = async (postId) => {
-        setModalIsOpen(true)
         dispatch(fetchModalPost(postId))
-        setPostForModal(currentPost)
-        // posts.map((post) => {
-        //     if (post.data.id === currentPostId) {
-        //         dispatch(setCurrentPost(post))
-        //         dispatch(setCurrentPostComments(postId.data.comments))
-        //         console.log(post.data.comments)
-        //     }
-        // })
+        setModalIsOpen(true)
     }
-
-
-    // console.log(postForModal)
 
     const closeModal = () => {
         setModalIsOpen(false)
+        dispatch(toggleComments(currentPost.data.id))
     }
 
     return (
@@ -51,7 +40,7 @@ const PostsList = () => {
                     <Post
                         post={post} 
                         key={generateId()}
-                        comments={post.data.comments}
+                        comments={currentPostComments}
                         showComments={post.data.showComments}
                         renderModal={renderModal}
                     />
@@ -64,8 +53,9 @@ const PostsList = () => {
                 <Post 
                     post={currentPost}
                     comments={currentPostComments}
-                    // showComments={postForModal ? postForModal.data.showComments: ''}
+                    showComments={currentPostShowComments}
                     renderModal={null}
+                    currentPostShowComments={currentPostShowComments}
                 />
             </ReactModal>
         </div>
