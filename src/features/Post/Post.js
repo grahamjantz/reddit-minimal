@@ -30,7 +30,6 @@ const Post = ({ post, renderModal, comments, showComments }) => {
         dispatch(toggleComments(post.data.id))
         dispatch(fetchComments(post.data.id))
     }    
-
     
     if (post.data.pending === false || post.data.pending === null) {
         return (
@@ -55,7 +54,7 @@ const Post = ({ post, renderModal, comments, showComments }) => {
                             onClick={sendDownvote}/>
                     </div>
                     <div className='post-body'>
-                        <h3 onClick={() => renderModal(post)}>{post.data.title}</h3>
+                        <h3 onClick={() => renderModal(post.data.id)}>{post.data.title}</h3>
                         <img src={post.data.url} alt=''/>
                         <p className='post-body'>{post.data.selftext}</p>
                         <div className='post-footer'>

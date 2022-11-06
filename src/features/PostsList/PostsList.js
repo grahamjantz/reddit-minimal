@@ -6,7 +6,7 @@ import ReactModal from 'react-modal'
 import './PostsList.css'
 
 import Post from '../Post/Post'
-import { fetchPosts, selectPosts, fetchComments, toggleComments } from './PostsListSlice'
+import { fetchPosts, selectPosts, fetchComments, toggleComments, setCurrentPostId, selectCurrentPostId, setCurrentPostComments, selectCurrenPostComments, setCurrentPost, fetchModalPost, selectCurrentPost } from './PostsListSlice'
 
 const PostsList = () => {
     
@@ -17,32 +17,26 @@ const PostsList = () => {
     }, [dispatch])
     
     const posts = useSelector(selectPosts)
+    const currentPostId = useSelector(selectCurrentPostId)
+    const currentPost = useSelector(selectCurrentPost)
+    const currentPostComments = useSelector(selectCurrenPostComments)
 
     const [modalIsOpen, setModalIsOpen] = useState(false)
-    const [postForModal, setPostForModal] = useState({
-        data: {
-            comments: [],
-            showComments: false
-        }
-    })
+    const [postForModal, setPostForModal] = useState()
 
-    const renderModal = async (post) => {
-        // dispatch(fetchComments(post.data.id))
-        setPostForModal(post)
+    const renderModal = async (postId) => {
         setModalIsOpen(true)
+        dispatch(fetchModalPost(postId))
+        setPostForModal(currentPost)
+        // posts.map((post) => {
+        //     if (post.data.id === currentPostId) {
+        //         dispatch(setCurrentPost(post))
+        //         dispatch(setCurrentPostComments(postId.data.comments))
+        //         console.log(post.data.comments)
+        //     }
+        // })
     }
 
-    let commentsForModal;
-    posts.map((post) => {
-        if (post.data.id === postForModal.data.id) {
-            // console.log(post.data.comments)
-            // console.log(postForModal.data.id)
-            commentsForModal = post.data.comments
-        }
-        return commentsForModal
-    })
-
-    console.log(commentsForModal)
 
     // console.log(postForModal)
 
@@ -68,12 +62,11 @@ const PostsList = () => {
                 onRequestClose={closeModal}
             >
                 <Post 
-                    post={postForModal}
-                    comments={commentsForModal}
-                    showComments={postForModal.data.showComments}
+                    post={currentPost}
+                    comments={currentPostComments}
+                    // showComments={postForModal ? postForModal.data.showComments: ''}
                     renderModal={null}
                 />
-
             </ReactModal>
         </div>
     )
