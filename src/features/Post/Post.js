@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { upvote, downvote, fetchComments, selectPosts, selectCurrentPostId, toggleComments } from '../PostsList/PostsListSlice';
+import React from 'react'
+import { upvote, downvote, fetchComments, selectCurrentPostId, toggleComments } from '../PostsList/PostsListSlice';
 
 import './Post.css'
 
